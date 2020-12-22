@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: nginx-cra
-        image: gcr.io/gitops-react-app/create_react_app:6
+        image: gcr.io/gitops-react-app/create_react_app:5
         ports:
         - containerPort: 80
   strategy:
