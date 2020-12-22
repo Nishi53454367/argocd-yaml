@@ -1,0 +1,13 @@
+# preview用(Green)Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollout-bluegreen-preview
+spec:
+  selector:
+    app: rollout-bluegreen
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
