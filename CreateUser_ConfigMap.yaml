@@ -1,0 +1,23 @@
+# ArgoCD上に任意のユーザーを作成します
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  # 例を参考に「accounts.任意のUsername: 権限」の形式で置き換えてください
+  # 設定できる権限は以下の通りです
+  #  - apiKey・・・APIキーの発行が可能
+  #  - login・・・ログインが可能
+  # 例1. APIキー発行・ログインが可能なuser1～4を作成
+  accounts.user1: apiKey, login
+  accounts.user2: apiKey, login
+  accounts.user3: apiKey, login
+  accounts.user4: apiKey, login
+  # 例2. APIキー発行のみ可能なuser5を作成
+  accounts.user5: apiKey
+  # 例3. ログインのみ可能なuser6を作成
+  accounts.user6: login

@@ -1,0 +1,29 @@
+# ArgoCD上のユーザーに権限付与ができます
+# 「CreateUser_ConfigMap.yaml」「ProjectPolicy_AppProject.yaml」の内容に合わせて変更してください
+# 例として以下の権限を付与しています
+#   - user1に全アプリ操作権限 + 全リポジトリ操作権限 + 全プロジェクト操作権限を付与
+#   - user2に全アプリ操作権限 + 全リポジトリ操作権限を付与
+#   - user3に「sample-project」プロジェクトの全アプリ編集権限 + 全リポジトリ操作権限を付与
+#   - user4に「sample-project」プロジェクトの全アプリ参照権限のみを付与
+# policy.csv配下の定義方法の詳細は以下を参考にして下さい
+#   https://argoproj.github.io/argo-cd/operator-manual/rbac/
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+data:
+  policy.default: role:readonly
+  policy.csv: |
+    p, role:app-admin, applications, *, */*, allow
+    p, role:app-admin, clusters, get, *, allow
+    p, role:repo-admin, repositories, *, *, allow
+    p, role:proj-admin, projects, *, *, allow
+    g, role:proj-admin, role:app-admin
+    g, role:proj-admin, role:repo-admin
+    g, user1, role:proj-admin
+    g, user2, role:app-admin
+    g, user2, role:repo-admin
+    g, user3, proj:sample-project:editor
+    g, user3, role:repo-admin
+    g, user4, proj:sample-project:viewer

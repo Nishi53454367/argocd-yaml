@@ -1,0 +1,35 @@
+# ArgoCD上のプロジェクト権限の定義ができます
+# プロジェクトを新規作成した場合は、こちらを使用してください
+# 「sample-project」というプロジェクトを想定した記述になっているので、必要に応じて全体的に任意の名前に置き換えて下さい
+# roles配下の定義方法の詳細は以下を参考にして下さい
+#   https://argoproj.github.io/argo-cd/user-guide/projects/#configuring-rbac-with-projects
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: sample-project
+  namespace: argocd
+spec:
+  description: sample-project project
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: '*'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+      # sample-projectプロジェクト上の全てのアプリに対しての参照権限
+    - name: viewer
+      description: Read-only privileges to sample-project
+      policies:
+        - p, proj:sample-project:viewer, applications, get, sample-project/*, allow
+      # sample-projectプロジェクト上の全てのアプリに対しての編集権限
+    - name: editor
+      description: Edit privileges to sample-project applications
+      policies:
+        - p, proj:sample-project:editor, applications, create, sample-project/*, allow
+        - p, proj:sample-project:editor, applications, update, sample-project/*, allow
+        - p, proj:sample-project:editor, applications, delete, sample-project/*, allow
+        - p, proj:sample-project:editor, applications, sync, sample-project/*, allow
+        - g, proj:sample-project:editor, proj:sample-project:viewer
