@@ -1,2 +1,2 @@
 # argocd-yaml
-ArgoCDで使うyamlファイル集
+ArgoCDで使えるyamlのストック
